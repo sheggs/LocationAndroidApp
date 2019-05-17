@@ -74,7 +74,12 @@ public class RegisterActivity  extends AppCompatActivity {
         email = findViewById(R.id.emailField2);
         submitButton = findViewById(R.id.registerSubmit);
 
-
+        switchScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openLoginActivity();
+            }
+        });
         /** When you click the submit button**/
 
         submitButton.setOnClickListener(new View.OnClickListener() {

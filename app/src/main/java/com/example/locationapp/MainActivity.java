@@ -33,6 +33,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if(User.getUser() != null){
+            openMainMenu();
+        }
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);//will hide the title
         getSupportActionBar().hide(); //hide the title bar
@@ -61,6 +64,21 @@ public class MainActivity extends AppCompatActivity {
         startActivity(switchToRegister);
     }
 
+    /**
+     *  Creating an intent to show the MainMenu
+     */
+    public void openMainMenu(){
+        if(User.getUser() != null){
+            /** Creating the intent **/
+            Intent switchToLogin = new Intent(this, MainMenu.class);
+            /** Starting activity**/
+            startActivity(switchToLogin);
+        }else{
+            Toast toast = Toast.makeText(getApplicationContext(), "Not logged in", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -94,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                     toast.show();
                     System.out.println(databaseHandler.getRow("useraccount","email",emailText.getText().toString()).getInt(0));
                     new User(databaseHandler.getRow("useraccount","email",emailText.getText().toString()).getInt(0),databaseHandler.getRow("useraccount","email",emailText.getText().toString()).getString(1) ,databaseHandler.getRow("useraccount","email",emailText.getText().toString()).getString(2) );
+                    openMainMenu();
                 }else{
                     Toast toast = Toast.makeText(getApplicationContext(), "Login is invalid", Toast.LENGTH_SHORT);
                     toast.show();
