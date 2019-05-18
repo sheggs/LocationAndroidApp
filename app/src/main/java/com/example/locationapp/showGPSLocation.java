@@ -41,7 +41,7 @@ public class showGPSLocation extends FragmentActivity implements OnMapReadyCallb
 
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(getIntent().getDoubleExtra("longitude",0), getIntent().getDoubleExtra("latitude",0));
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        mMap.addMarker(new MarkerOptions().position(sydney).title("Your location"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
     }
 }

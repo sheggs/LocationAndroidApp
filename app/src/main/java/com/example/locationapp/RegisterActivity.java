@@ -1,14 +1,6 @@
 package com.example.locationapp;
 
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Build;
-import android.os.Environment;
-import android.os.VibrationEffect;
-import android.os.Vibrator;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -26,7 +18,7 @@ public class RegisterActivity  extends AppCompatActivity {
     private TextView confirmPassword = null;
     private TextView username = null;
     private Button submitButton = null;
-    private SQLDatabase databaseHandler = null;
+    private SQLHandler databaseHandler = null;
     /**
      *  Creating an intent to show the Register Activity
      */
@@ -65,7 +57,7 @@ public class RegisterActivity  extends AppCompatActivity {
         switchScreen = findViewById(R.id.switchScreen);
         switchScreen.setChecked(true);
         switchScreen.setText("Login");
-        databaseHandler = new SQLDatabase(this);
+        databaseHandler = new SQLHandler(this);
 
         /** Storing each visual component as a variable **/
         username = findViewById(R.id.username);

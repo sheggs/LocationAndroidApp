@@ -32,11 +32,17 @@ public class MainMenu extends AppCompatActivity {
         /** Starting activity**/
         startActivity(returnToLoginPage);
     }
-    public void goToGPS(){
+    private void goToGPS(){
         /** Creating the intent **/
         Intent gotoGPS = new Intent(this, GPSActivity.class);
         /** Starting activity**/
         startActivity(gotoGPS);
+    }
+    private void goToWeather(){
+        /** Creating the intent **/
+        Intent gotoweather = new Intent(this, weatherSection.class);
+        /** Starting activity**/
+        startActivity(gotoweather);
     }
     @Override
     protected void onStart() {
@@ -45,6 +51,7 @@ public class MainMenu extends AppCompatActivity {
         listview = findViewById(R.id.listview);
         listview.setAdapter(new MenuListViewAdapter(this, options,descriptions));
         logoutButton = findViewById(R.id.logout_button);
+        /** When logout button is pressed **/
         logoutButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,7 +59,7 @@ public class MainMenu extends AppCompatActivity {
                 returnToLogin();
             }
         });
-
+        /** when the list is pressed it should take the user somewhere **/
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -62,8 +69,14 @@ public class MainMenu extends AppCompatActivity {
                     Toast toast = Toast.makeText(getApplicationContext(), "GPS Selected", Toast.LENGTH_SHORT);
                     toast.show();
                 }
+                else if(position == 1){
+                    goToWeather();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Weather Selected", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
             }
         });
 
     }
+
 }

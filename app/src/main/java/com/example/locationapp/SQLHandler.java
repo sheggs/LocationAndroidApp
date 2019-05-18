@@ -8,19 +8,26 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.service.autofill.UserData;
 
-public class SQLDatabase extends SQLiteOpenHelper {
-
+public class SQLHandler extends SQLiteOpenHelper {
+    /** Intialising variables **/
 
     private Context context;
     private static final String DB_NAME = "part3.db";
 
-    public SQLDatabase(Context context) {
+    /**
+     *
+     * @param context Context of the activty.
+     */
+    public SQLHandler(Context context) {
         super(context, DB_NAME, null, 1);
         this.context = context;
 
     }
 
-
+    /**
+     *
+     * @param db The SQLite database.
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         createUserTable(db);
@@ -34,15 +41,15 @@ public class SQLDatabase extends SQLiteOpenHelper {
      * @param email The email of the uesr
      * @return a boolean value whether it has been successful.
      */
-    public boolean createUserAccount(String username, String password, String email) {
+    public void createUserAccount(String username, String password, String email) {
+        /** getting the database **/
         SQLiteDatabase db = this.getWritableDatabase();
-
+        /** Storing the user account values **/
         ContentValues cv = new ContentValues();
         cv.put("username", username);
         cv.put("password", password);
         cv.put("email", email);
         db.insert("useraccount", null, cv);
-        return true;
     }
 
     /**
@@ -104,15 +111,27 @@ public class SQLDatabase extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS gpsstorage(storage_id INTEGER PRIMARY KEY AUTOINCREMENT,name VARCHAR(255), gpsLatitutde DOUBLE, gpsLongitude DOUBLE, user_id INTEGER, FOREIGN KEY(user_id) REFERENCES useraccount(user_id) ON DELETE CASCADE )");
     }
 
+    /**
+     *
+     * @param table The table name
+     * @param column The column name
+     * @param row The row you want to refrence
+     * @return A boolean value whether this exists.
+     */
     public boolean checkField(String table, String column, String row){
+        /** Getting the database **/
         boolean checkingField = false;
         SQLiteDatabase db =this.getReadableDatabase();
         try {
+            /** Querying for the row **/
             Cursor c = db.rawQuery("SELECT * FROM "+ table + " WHERE "+ column + " = '" + row+  "'", null);
+            /** Move cursor the the first row **/
             c.moveToFirst();
+            /** If the first row is null then the record does not exist. **/
             if (c.getString(1) == null) {
                 checkingField =  false;
             }else{
+                /** If the first row is not null the record exists **/
                 checkingField = true;
             }
         } catch(CursorIndexOutOfBoundsException e){
@@ -124,17 +143,21 @@ public class SQLDatabase extends SQLiteOpenHelper {
 
     }
 
-    public Cursor getData() {
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor data = db.rawQuery("SELECT * FROM useraccount", null);
-        return data;
-
-    }
-    public boolean checkCrednetials(String email, String password){
+    /**
+     *
+     * @param email The email of the user
+     * @param password The password of the user
+     * @return
+     */
+    public boolean checkCredentials(String email, String password){
+        /** Getting the database **/
         SQLiteDatabase db =this.getReadableDatabase();
         try {
+            /** Querying the database for the email and password combination **/
             Cursor c = db.rawQuery("SELECT * FROM useraccount WHERE email = '" + email + "' AND password = '" + password + "'", null);
+            /** Move the cursor to the front **/
             c.moveToFirst();
+            /** Checking if the first row is null. If so the record does not exist **/
             if (c.getString(1) == null) {
                 return false;
             }else{
@@ -144,19 +167,7 @@ public class SQLDatabase extends SQLiteOpenHelper {
             return false;
         }
     }
-    //    public boolean doesRowExist(String tablename,String column, String data){
-//        Cursor c = db.getReadableDatabase().rawQuery("SELECT * FROM "+tablename+" WHERE "+column + " = '" + data+"'", null);
-//        c.moveToFirst();
-//        try {
-//            if (c.getString(c.getColumnIndex(column)) != null) {
-//                return true;
-//            } else {
-//                return false;
-//            }
-//        }catch (CursorIndexOutOfBoundsException e){
-//            return false;
-//        }
-//    }
+
 
 
 }
