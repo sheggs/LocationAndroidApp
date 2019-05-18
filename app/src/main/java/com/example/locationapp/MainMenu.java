@@ -38,6 +38,12 @@ public class MainMenu extends AppCompatActivity {
         /** Starting activity**/
         startActivity(gotoGPS);
     }
+    private void goToCompass(){
+        /** Creating the intent **/
+        Intent goToCompass = new Intent(this, CompassActivity.class);
+        /** Starting activity**/
+        startActivity(goToCompass);
+    }
     private void goToWeather(){
         /** Creating the intent **/
         Intent gotoweather = new Intent(this, weatherSection.class);
@@ -72,6 +78,11 @@ public class MainMenu extends AppCompatActivity {
                 else if(position == 1){
                     goToWeather();
                     Toast toast = Toast.makeText(getApplicationContext(), "Weather Selected", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                else if (position == 2){
+                    goToCompass();
+                    Toast toast = Toast.makeText(getApplicationContext(), "Compass Selected", Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }

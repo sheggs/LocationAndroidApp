@@ -2,9 +2,11 @@
     <string name="app_name">LocationApp</string>
     <string name="title_activity_gps">GPSActivity</string>
     <string name="title_activity_register_gps">RegisterGPS</string>
-    <string name = "main_title"> MultiApp </string>
-    <string name = "main_desc">Weather, GPS and More</string>
+    <string name="main_title"> MultiApp </string>
+    <string name="main_desc">Weather, GPS and More</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_register_gpslocation">registerGPSLocation</string>
     <string name="title_activity_show_gpslocation">Map</string>
+    <string name = "compass_title">Compass</string>
+    <string name = "compass_detials">Compass Details</string>
 </resources>
