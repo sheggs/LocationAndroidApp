@@ -1,6 +1,9 @@
 package com.example.locationapp;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -20,7 +23,18 @@ public class MainActivity extends AppCompatActivity {
     private Button submitButton = null;
     private Switch switchScreen = null;
     private SQLHandler databaseHandler = null;
-
+    /** The permissions needed **/
+    private String[] permissions = {android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.INTERNET, Manifest.permission.ACCESS_COARSE_LOCATION};
+    private void checkPermissions() {
+        /** Looping through every permission and requesting it **/
+        for(int i = 0; i<permissions.length;i++){
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if(PackageManager.PERMISSION_GRANTED != checkSelfPermission(permissions[i])){
+                    requestPermissions(permissions,1);
+                }
+            }
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         /** Checking if user is logged in. If so send them to main menu. **/
@@ -62,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        checkPermissions();
         /** Getting all the data **/
         this.emailText = findViewById(R.id.emailField);
         this.password = findViewById(R.id.passwordField);

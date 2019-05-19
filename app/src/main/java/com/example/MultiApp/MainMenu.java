@@ -10,12 +10,16 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.google.android.gms.common.util.ArrayUtils;
+
+import java.util.ArrayList;
+
 public class MainMenu extends AppCompatActivity {
 
     /** Initalising variables. Set to null so they can be garbage collected if needed**/
     private ListView listview = null;
-    private String[] options = {"GPS Tracker", "Weather", "Compass"};
-    private String[] descriptions = {"Track yourself", "View the current weather", "Compass, use it for what ever you need!"};
+    private String[] options = {"GPS Tracker", "Weather", "Compass","Look at all your GPS locations"};
+    private String[] descriptions = {"Track yourself", "View the current weather", "Compass, use it for what ever you need!","All GPS locations that you have saved"};
     private Button logoutButton = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,22 @@ public class MainMenu extends AppCompatActivity {
 
 
     }
+    /**
+     *
+     * @param doubleArray The array you want to convert to double array.
+     * @return  The converted arraylist.
+     */
+    private double[] toDoubleArray(ArrayList<Double> doubleArray){
+        /** Intialising array **/
+        double[] array = new double[doubleArray.size()];
+        int i = 0;
+        /** Looping through arrayList and adding it to the double array **/
+        for(Double d : doubleArray){
+            array[i] = d;
+            i++;
+        }
+        return array;
+    }
     public void returnToLogin(){
         /** Creating the intent **/
         Intent returnToLoginPage = new Intent(this, MainActivity.class);
@@ -35,6 +55,20 @@ public class MainMenu extends AppCompatActivity {
     private void goToGPS(){
         /** Creating the intent **/
         Intent gotoGPS = new Intent(this, GPSActivity.class);
+        /** Starting activity**/
+        startActivity(gotoGPS);
+    }
+    private void goToMaps(){
+        /** Creating the intent **/
+        Intent gotoGPS = new Intent(this, showGPSLocation.class);
+        /** Getting GPS DATA **/
+        ParseGPSData GPSData = new ParseGPSData(this);
+        System.out.println(GPSData.getLatitude().size());
+        /** Sending GPS data to activity **/
+        gotoGPS.putExtra("ListTitle",GPSData.getTitle());
+        gotoGPS.putExtra("ListLat",toDoubleArray(GPSData.getLatitude()));
+        gotoGPS.putExtra("ListLong",toDoubleArray(GPSData.getLongitude()));
+        System.out.println(GPSData.getLatitude().toArray(new Double[10]).length);
         /** Starting activity**/
         startActivity(gotoGPS);
     }
@@ -83,6 +117,11 @@ public class MainMenu extends AppCompatActivity {
                 else if (position == 2){
                     goToCompass();
                     Toast toast = Toast.makeText(getApplicationContext(), "Compass Selected", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                else if(position == 3){
+                    goToMaps();
+                    Toast toast = Toast.makeText(getApplicationContext(), "All GPS locations are shown in the map", Toast.LENGTH_SHORT);
                     toast.show();
                 }
             }

@@ -21,6 +21,7 @@ public class registerToGPS extends AppCompatActivity {
     private TextView GPSLocation = null;
     private Button SubmitButton = null;
     private TextView customName = null;
+    private Button backButton = null;
     private LocationListener locationListener = null;
     private LocationManager locationManager = null;
     private double longitude = 0;
@@ -28,7 +29,12 @@ public class registerToGPS extends AppCompatActivity {
     /** The permissions needed **/
     private String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET,Manifest.permission.ACCESS_COARSE_LOCATION};
 
-
+    private void goBack(){
+        /** Creating the intent **/
+        Intent switchToLogin = new Intent(this, MainMenu.class);
+        /** Starting activity**/
+        startActivity(switchToLogin);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -104,7 +110,15 @@ public class registerToGPS extends AppCompatActivity {
         this.GPSLocation = findViewById(R.id.locationGPSText);
         this.SubmitButton = findViewById(R.id.submitGPSData);
         this.customName = findViewById(R.id.customGPSName);
+        this.backButton = findViewById(R.id.back_to_mainmenu);
         this.GPSData.setText("No GPS Data. Wait a few seconds");
+        /** setting up back button **/
+        this.backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goBack();
+            }
+        });
         /** Setting up GPS information **/
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             /** Requesting permissions **/

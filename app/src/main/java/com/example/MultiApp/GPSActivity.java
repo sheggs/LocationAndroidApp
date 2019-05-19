@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class GPSActivity extends AppCompatActivity {
     private Button backButton;
 
+
     public void goToRegisterGPS(){
         /** Creating the intent **/
         Intent goToRegisterGPS = new Intent(this, registerToGPS.class);
@@ -73,54 +74,35 @@ public class GPSActivity extends AppCompatActivity {
             }
         });
         /** Initalising ArrayList that has the information **/
-        final ArrayList<String> title = new ArrayList<String>();
-        ArrayList<Double> longitude =  new ArrayList<Double>();
-        final ArrayList<Double> latitude =  new ArrayList<Double>();
+        ParseGPSData GPSData = new ParseGPSData(this);
+        ArrayList<String> title = GPSData.getTitle();
+        ArrayList<Double> longitude =  GPSData.getLongitude();
+        ArrayList<Double> latitude =GPSData.getLatitude();
         /** Make first value empty **/
-        title.add(null);
-        longitude.add(0.0);
-        latitude.add(0.0);
+        title.add(0,null);
+        longitude.add(0,0.0);
+        latitude.add(0,0.0);
         ListView listView = findViewById(R.id.listViewGPS);;
         /** Getting SQL handler **/
         SQLHandler dbsql = new SQLHandler(getApplicationContext());
         /** Getting all the users data **/
-        Cursor data = dbsql.getUserGPSData();
-        /** Creating a pointer **/
-        int count = data.getCount();
-        /** Checking if Cursor is not empty **/
-        if(data.getCount() > 0){
-            /** Creating another pointer **/
-            int i = 0;
-            /** Loop through the cursor until last value **/
-            while (i<data.getCount()){
-                /** Add data into array List **/
-                title.add(data.getString(data.getColumnIndex("name")));
-                longitude.add(data.getDouble(data.getColumnIndex("gpsLongitude")));
-                latitude.add(data.getDouble(data.getColumnIndex("gpsLatitutde")));
-                /** Move cursor to point to the next row **/
-                data.moveToNext();
-                /** Increament pointer **/
-                i++;
 
-            }
-            /** Convert arraylist into Array **/
-            String[] titles = title.toArray(new String[title.size()]);
-            final Double[] longitudes = longitude.toArray(new Double[longitude.size()]);
-            final Double[] latitudes = latitude.toArray(new Double[latitude.size()]);
-            /** setting list view adapter **/
-            listView.setAdapter(new GPSListViewAdapter(this, titles, longitudes, latitudes));
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    /** GPS BUTTON**/
-                    if(position != 0) {
-                        goToMaps(longitudes[position], latitudes[position]);
-                    }
+        /** Convert arraylist into Array **/
+        String[] titles = title.toArray(new String[title.size()]);
+        final Double[] longitudes = longitude.toArray(new Double[longitude.size()]);
+        final Double[] latitudes = latitude.toArray(new Double[latitude.size()]);
+        /** setting list view adapter **/
+        listView.setAdapter(new GPSListViewAdapter(this, titles, longitudes, latitudes));
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                /** GPS BUTTON**/
+                if(position != 0) {
+                    goToMaps(longitudes[position], latitudes[position]);
                 }
-            });
-        }else{
+            }
+        });
 
-        }
 
     }
 

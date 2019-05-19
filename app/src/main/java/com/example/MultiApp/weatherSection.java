@@ -1,6 +1,7 @@
 package com.example.locationapp;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -12,7 +13,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.JsonReader;
+import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -35,10 +38,20 @@ public class weatherSection extends AppCompatActivity {
     private LocationManager locationManager = null;
     private LocationListener locationListener = null;
     private JSONObject weatherData = null;
+    private Button backButton  = null;
+
     /** Permissions needed**/
     private String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.INTERNET,Manifest.permission.ACCESS_COARSE_LOCATION};
     private double longitude;
     private double latitude;
+
+
+    private void goBack(){
+        /** Creating the intent **/
+        Intent switchToLogin = new Intent(this, MainMenu.class);
+        /** Starting activity**/
+        startActivity(switchToLogin);
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,12 +81,12 @@ public class weatherSection extends AppCompatActivity {
             URL openweather_url = new URL(url);
             /** Creating HTTP Connection **/
             HttpURLConnection con = (HttpURLConnection) openweather_url.openConnection();
-            /** Using GET request since the API advisies using GET **/
+            /** Using GET request since the API advises using GET **/
             con.setRequestMethod("GET");
-            /** Reading the outbut **/
+            /** Reading the response **/
             BufferedReader url_output = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String url_content =url_output.readLine();
-            /** Stroing each line of the response **/
+            /** Storing each line of the response **/
             while(url_content != null) {
                 jsonStringData.append(url_content);
                 url_content = url_output.readLine();
@@ -116,11 +129,11 @@ public class weatherSection extends AppCompatActivity {
                 /** Getting the JSON weather Data **/
                 getWeatherJSONData(latitude,longitude);
                 try {
-                    JSONObject main_JSON = new JSONObject(getWeatherJSONData(17.919039, 42.920570).get("main").toString());
+                    JSONObject main_JSON = new JSONObject(getWeatherJSONData(latitude, longitude).get("main").toString());
                     /** Setting tempreture text. Converting temp from kelvin to degrees **/
                     tempreture.setText("Tempreture " + ((Double.parseDouble(main_JSON.get("temp").toString()) - 273)+ "").substring(0,5) + "°C");
-                    min_temp.setText("Tempreture " + ((Double.parseDouble(main_JSON.get("temp_min").toString()) - 273) + "").substring(0,5)+ "°C");
-                    max_temp.setText("Tempreture " + ((Double.parseDouble(main_JSON.get("temp_max").toString())-273) + "").substring(0,5)+ "°C");
+                    min_temp.setText("Min Tempreture " + ((Double.parseDouble(main_JSON.get("temp_min").toString()) - 273) + "").substring(0,5)+ "°C");
+                    max_temp.setText("Max Tempreture " + ((Double.parseDouble(main_JSON.get("temp_max").toString())-273) + "").substring(0,5)+ "°C");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -154,6 +167,14 @@ public class weatherSection extends AppCompatActivity {
         this.tempreture = findViewById(R.id.tempreture);
         this.max_temp = findViewById(R.id.maxTemp);
         this.min_temp = findViewById(R.id.mintemp);
+        this.backButton = findViewById(R.id.back_weather);
+        /** Go Back to the main menu **/
+        this.backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goBack();
+            }
+        });
         /** Calling to get the GPS data **/
         getGPSData();
 
