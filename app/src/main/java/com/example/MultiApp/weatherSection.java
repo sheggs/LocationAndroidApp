@@ -73,7 +73,7 @@ public class weatherSection extends AppCompatActivity {
     public JSONObject getWeatherJSONData(double lat, double lon){
         StringBuffer jsonStringData = new StringBuffer();
         /** The API Key**/
-        String key = "e8ad15f5ec7d0e84a185356fac9dd6a4";
+        String key = "";
         /** The API URL **/
         String url = "http://api.openweathermap.org/data/2.5/weather?lat="+ lat+"&lon="+lon+"&appid="+key;
         try {
